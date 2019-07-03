@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 欢迎使用学生选课管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <script src="/static/scripts/modernizr-2.6.2.js"></script>
+</head>
+
+<body>
+
+    <div class="container body-content">
+        <form action="../login" method="POST">
+            <div class="input-group">
+                <span class="input-group-addon">用户名</span>
+                <input name="uname" type="text" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">密码</span>
+                <input name="pw" type="text" class="form-control">
+            </div>
+            <br/>
+            <div class="btn-group" data-toggle="buttons" >
+                <button class="btn btn-default" type="submit" name="login" value="stu">
+                    <input type="checkbox"> 学生登录
+                </button>
+                <button class="btn btn-default" type="submit" name="login" value="teacher">
+                    <input type="checkbox"> 教师登录
+                </button>
+                <button class="btn btn-default" type="submit" name="login" value="adm">
+                    <input type="checkbox"> 管理员登录
+                </button>
+            </div>
+        </form>
+
+
+
+        <hr />
+        <footer>
+            <p>&copy; {{ year }} - 大作业</p>
+        </footer>
+    </div>
+</body>

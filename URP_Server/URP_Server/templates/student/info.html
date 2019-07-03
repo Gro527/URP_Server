@@ -1,0 +1,23 @@
+{% extends 'student/stu_navibar.html' %}
+{% block info %}
+<div class="row">
+    <div class="col-md-4">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><strong>姓名：</strong></td>
+                    <td>{{ stu['name'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>学号：</strong></td>
+                    <td>{{ stu['id'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>性别：</strong></td>
+                    <td>{{ stu['sex'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'student/stu_navibar.html' %}
+{% block info %}
+<div class="row">
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td><strong>课程号</strong></td>
+                    <td><strong>课程名称</strong></td>
+                    <td><strong>成绩</strong></td>
+                    <td><strong>学分</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stu_cs in stu_course_list %}
+                <tr>
+                    <td>{{ stu_cs['course_id'] }}</td>
+                    <td>{{ stu_cs['course_name'] }}</td>
+                    <td>{{ stu_cs['score'] }}</td>
+                    <td>{{ stu_cs['credit'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

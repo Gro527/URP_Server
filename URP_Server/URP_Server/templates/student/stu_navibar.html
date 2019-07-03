@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block content %}
+<hr/>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2" style="background-color: rgb(211, 224, 224)">
+            <p></p>
+            <form action="./base_info" method="POST">
+                <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit" name="uname" value="{{stu_id}}">基本信息</button>
+            </form>
+            <form action="./course_info" method="POST">
+                <p><button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit" name="uname" value="{{stu_id}}">课程信息</button></p>
+            </form>
+        </div>
+        <div class="col-md-10">
+            {% block info %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
