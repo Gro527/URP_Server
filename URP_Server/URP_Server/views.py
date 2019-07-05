@@ -7,6 +7,7 @@ from flask import render_template,request,redirect,url_for
 from URP_Server import app
 from URP_Server.db import db_stu
 from URP_Server import func
+import json
 
 
 # pages
@@ -52,7 +53,7 @@ def test():
         stu = db_stu.get_stu_by_id('s001')
     )
 
-
+# 学生
 @app.route('/stu/base_info', methods=['POST'])
 def stu_info():
     uname = request.form['uname']
@@ -61,7 +62,7 @@ def stu_info():
         return "Log in failed", 403
     else:
         return render_template(
-            'student/info.html',
+            'student/base_info.html',
             stu = stu,
             stu_id = stu['id'],
             title = "学生信息"
@@ -78,20 +79,67 @@ def stu_course_info():
         stu_id = stu_id
     )
     
-@app.route('/teacher', methods=['POST'])
-def tea_page():
-    uname = request.form['uname']
-    pw = request.form['pw']
-    tea = func.signin.tea_login(uname,pw)
+
+# 教师
+@app.route('/tea/base_info', methods=['POST'])
+def tea_info():
+    tea_id = request.form['uname']
+    tea = func.tea_r.tea_info(tea_id)
     if tea == None:
         return "Log in failed", 403
     else:
         return render_template(
-            'teacher.html',
+            'teacher/base_info.html',
+            tea = tea,
+            tea_id = tea_id
+        )
+
+@app.route('/tea/course_info', methods=['POST'])
+def tea_course_info():
+    tea_id = request.form['uname']
+    course_id = request.form.get('course_id',None)
+    class_id = request.form.get('class_id',None)
+    tea = func.tea_r.tea_info(tea_id)
+    print(request.form)
+    if not course_id or not class_id:
+        return render_template(
+            'teacher/course_info.html',
+            tea_id = tea_id,
             tea = tea
         )
-# api
+    else:
+        tcc = func.tea_r.tea_class_course(tea_id,class_id,course_id)
+        tcc_json = json.dumps(tcc, ensure_ascii=False)
+        print(tcc ,tcc_json)
+        return render_template(
+            'teacher/course_info.html',
+            tea_id = tea_id,
+            tea = tea,
+            class_id = class_id,
+            course_id = course_id,
+            class_course = tcc,
+            class_course_json = tcc_json
+        )
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# api
 # login
 @app.route('/login', methods=['POST'])
 def login():
@@ -102,7 +150,23 @@ def login():
         stu = func.signin.stu_login(uname,pw)
         if stu != None:
             return redirect(url_for('stu_info')),307
-    elif login_type == 'tea':
-        return redirect(url_for('tea_page')), 307
+    elif login_type == 'teacher':
+        tea = func.signin.tea_login(uname,pw)
+        if tea != None:
+            return redirect(url_for('tea_info')), 307
     elif login_type == 'adm':
         return redirect(url_for('adm_page')),307
+    else:
+        return "invalid request type", 403
+
+# 分数录入
+@app.route('/score', methods=['POST'])
+def up_score():
+    print(request.form)
+    stu_id = request.form['student_id']
+    course_id = request.form['course_id']
+    score = request.form['score']
+    if func.tea_w.up_score(stu_id,course_id,score):
+        return "录入成功"
+    else:
+        return "录入失败",500

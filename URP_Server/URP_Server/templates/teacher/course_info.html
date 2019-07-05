@@ -1,0 +1,107 @@
+{% extends 'teacher/tea_navibar.html' %}
+{% block info %}
+<div class="row">
+    <div>
+        <table class="table">
+            <caption>我任教的课程</caption>
+            <thead>
+                <tr>
+                    <td><strong>课程号</strong></td>
+                    <td><strong>课程名称</strong></td>
+                    <td><strong>班级</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in tea['course_list'] %}
+                <tr><form  action="./course_info" method="POST">
+                    <td>{{ course['course_id'] }}</label></td>
+                    <td>{{ course['course_name'] }}</td>
+                    <td>{{ course['class_id'] }}</td>
+                    <input type="hidden" name="course_id" value="{{ course['course_id'] }}">
+                    <input type="hidden" name="class_id" value="{{ course['class_id'] }}">
+                    {% if course['course_id'] == course_id and course['class_id'] ==class_id %}
+                        <td>正在查看</td>
+                    {% else %}
+                        <td><button class="button" type="submit"
+                            name="uname" value="{{tea_id}}">查看详情</button></td>
+                    {% endif %}
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+    {% if course_id %}
+    <div>
+        <table class="table">
+            <caption>{{ class_id }}班{{course_id}}课程成绩表</caption>
+            <thead>
+                <tr>
+                    <td>学号</td>
+                    <td>姓名</td>
+                    <td>成绩</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stu in class_course %}
+                <tr>
+                    <td>{{ stu['student_id'] }}</td>
+                    <td>{{ stu['student_name'] }}</td>
+                    <td>{{ stu['score'] }}</td>
+                    <td><form action="../score" method="POST">
+                        <input type="hidden" name="course_id" value="{{ course_id }}">
+                        <input type="hidden" name="student_id" value="{{stu['student_id']}}">
+                        <input type="text" name="score" >
+                        <button type="submit">修改成绩</button>
+                    </form></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <div id="graph" style="width: 600px;height:400px;"> 
+        
+    </div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('graph'));
+        var decodeHtmlEntity = function(x) {
+            return x.replace(/&#(\d+);/g, function(match, dec) {
+              return String.fromCharCode(dec);
+            });
+          };
+        var tcc = JSON.parse(decodeHtmlEntity('{{ class_course_json }}'));
+        var stages = [0,0,0,0,0];
+        for(var stu in tcc){
+            stages[(tcc[stu].score-50) % 10] += 1;
+        };
+        console.log(stages)
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '{{ class_id }}班{{course_id}}课程成绩分布图'
+            },
+            tooltip: {},
+            legend: {
+                data:['人数']
+            },
+            xAxis: {
+                data: ["60以下","60-70","70-80","80-90","90以上"]
+            },
+            yAxis: {
+            },
+            series: [{
+                name: '人数',
+                type: 'bar',
+                data: stages
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    {% endif %}
+</div>
+{% endblock %}

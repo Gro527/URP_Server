@@ -1,0 +1,50 @@
+{% extends 'teacher/tea_navibar.html' %}
+{% block info %}
+<div class="row">
+    <div class="col-md-8">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><strong>姓名：</strong></td>
+                    <td>{{ tea['name'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>教师号：</strong></td>
+                    <td>{{ tea['id'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>任教课程：</strong></td>
+                    <td>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <td>课程号</td>
+                                    <td>课程名称</td>
+                                    <td>班级</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in tea['course_list'] %}
+                                <tr>
+                                    <form  action="./course_info" method="POST">
+                                    <td>{{ course['course_id'] }}</td>
+                                    <td>{{ course['course_name'] }}</td>
+                                    <td>{{ course['class_id'] }}</td>
+                                    <input type="hidden" name="course_id" value="{{ course['course_id'] }}">
+                                    <input type="hidden" name="class_id" value="{{ course['class_id'] }}">
+                                    <td><button class="button" class="button" type="submit"
+                                        name="uname" value="{{tea_id}}">查看详情</button></td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
