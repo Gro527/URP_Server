@@ -1,0 +1,91 @@
+{% extends 'admin/adm_navibar.html' %}
+{% block info %}
+<div class="col-md-8">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="dropdown">
+                <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+                    {% if course_id %}
+                    {{course['name']}}
+                    {% else %}
+                    选择课程
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    {% for row in course_list %}
+                    <form action="./course_info" method="POST">
+                        <input type="hidden" name="uname" value="{{ adm_id }}">
+                        <li role="presentation">
+                            <button type="submit" role="menuitem" tabindex="-1" style="border: none;background:none"
+                                name="course_id" value="{{ row['id'] }}">{{ row['name'] }}</button>
+                        </li>
+                    </form>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <button id="button" type="button" class="button btn-default"  onclick="addCourse()">+</button>
+        </div>
+
+    </div>
+
+    <hr />
+    {% if course_id %}
+    <div id="info">
+        <table class="table">
+            <tr>
+                <td><strong>课程编号</strong></td>
+                <td>{{course_id}}</td>
+            </tr>
+            <tr>
+                <td><strong>课程名称</strong></td>
+                <td>{{course['name']}}</td>
+            </tr>
+            <tr>
+                <td><strong>学分</strong></td>
+                <td>{{course['credit']}}</td>
+            </tr>
+            <tr>
+                <td><strong>选课人数</strong></td>
+                <td>待补充</td>
+            </tr>
+            <tr>
+                <td><strong>任课教师</strong></td>
+                <td>待补充</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+    <div id="add" hidden="true">
+        <form role="form" action="./add_course" method="POST">
+            <input type="hidden" name="uname" value="{{ adm_id }}">
+            <div class="input-group">
+                <span class="input-group-addon">课程编号</span>
+                <input name="course_id" type="text" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">课程名称</span>
+                <input name="course_name" type="text" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">课程学分</span>
+                <input name="credit" type="text" class="form-control">
+            </div>
+            <button type="submit"> 提交</button>
+        </form>
+    </div>
+</div>
+<script>
+    function addCourse() {
+        var info = document.getElementById("info");
+        var add = document.getElementById("add");
+        var button = document.getElementById("button");
+        if (info) info.hidden = !info.hidden;
+        add.hidden = !add.hidden;
+        if(!add.hidden){
+            button.hidden = true
+        }
+    }
+</script>
+{% endblock %}

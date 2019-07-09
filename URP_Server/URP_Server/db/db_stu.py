@@ -51,3 +51,18 @@ def get_stu_course_by_stu_id(stu_id):
         except IndexError as ie:
             print(ie)
             return []
+
+def add_stu(stu_id,name,sex,birthdate,entrance_date,class_id):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "insert into student(id,password,name,sex,birthdate,entrance_date,class_id) values(\
+                '%s','%s','%s',%s,'%s','%s','%s')" % (stu_id,stu_id,name,sex,birthdate,entrance_date,class_id)
+            print(sql)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False

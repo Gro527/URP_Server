@@ -1,0 +1,22 @@
+{% extends 'admin/adm_navibar.html' %}
+{% block info %}
+<div class="col-md-8">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td><strong>工号</strong></td>
+                <td>{{ adm['id'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>姓名</strong></td>
+                <td>{{ adm['name'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>权限</strong></td>
+                <td>管理员</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

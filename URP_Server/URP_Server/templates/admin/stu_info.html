@@ -1,0 +1,126 @@
+{% extends 'admin/adm_navibar.html' %}
+{% block info %}
+<div class="row">
+    <div class="col-md-2">
+
+        <div class="list-group">
+            <form action="./stu_info" method="POST">
+                <input type="hidden" name="uname" value="{{ adm_id }}">
+                {% for class in class_list %}
+                <button class="list-group-item" type="submit" name="class_id" value="{{class['id']}}"
+                    style="width:100%">
+                    {{class['id']}}
+                </button>
+                {% endfor %}
+            </form>
+            <button class="list-group-item" style="width:100%" onclick="showAddClass()">+</button>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="list-group">
+
+            <form action="./stu_info" method="POST">
+                <input type="hidden" name="class_id" value="{{ class_id }}">
+                <input type="hidden" name="uname" value="{{ adm_id }}">
+                {% for stu in stu_list %}
+                <button class="list-group-item row" type="submit" name="student_id" value="{{stu['id']}}"
+                    style="width:100%">
+                    {{stu['id']}} {{stu['name']}}
+                </button>
+                {% endfor %}
+
+            </form>
+            {% if class_id %}
+            <button class="list-group-item row" style="width:100%" onclick="showAddStudent()">+</button>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-8" id="stu_info">
+        {% if student %}
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><strong>姓名：</strong></td>
+                    <td>{{ student['name'] }}</td>
+                <tr>
+                    <td><strong>学号：</strong></td>
+                    <td>{{ student['id'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>性别：</strong></td>
+                    <td>{{ student['sex'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>课程列表</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    <div class="col-md-8" id="add_stu" hidden>
+        <form role="form" action="./add_student" method="POST">
+            <input type="hidden" name="uname" value="{{ adm_id }}">
+            <input type="hidden" name="class_id" value="{{ class_id }}">
+            <div class="input-group">
+                <span class="input-group-addon">学号</span>
+                <input name="student_id" type="text" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">姓名</span>
+                <input name="name" type="text" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">性别</span>
+                <input name="sex" type="number" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">生日</span>
+                <input name="birth_date" type="date" class="form-control">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">入学日期</span>
+                <input name="entrance_date" type="date" class="form-control">
+            </div>
+            <button type="submit"> 提交</button>
+        </form>
+    </div>
+    <div class="col-md-8" id="add_class" hidden>
+        <form role="form" action="./add_class" method="POST">
+            <input type="hidden" name="uname" value="{{ adm_id }}">
+            <div class="input-group">
+                <span class="input-group-addon">班级编号</span>
+                <input name="class_id" type="text" class="form-control">
+            </div>
+
+            <button type="submit"> 提交</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showAddStudent() {
+        var stu_info = document.getElementById("stu_info")
+        var add_stu = document.getElementById("add_stu")
+        var add_class = document.getElementById("add_class")
+        if (stu_info) {
+            stu_info.hidden = !stu_info.hidden
+        }
+        add_stu.hidden = !add_stu.hidden
+        if (!add_stu.hidden && !add_class.hidden) {
+            add_class.hidden = true
+        }
+    }
+    function showAddClass() {
+        var stu_info = document.getElementById("stu_info")
+        var add_stu = document.getElementById("add_stu")
+        var add_class = document.getElementById("add_class")
+        add_class.hidden = !add_class.hidden
+        if (stu_info) {
+            stu_info.hidden = !stu_info.hidden
+        }
+        if (!add_stu.hidden && !add_class.hidden) {
+            add_stu.hidden = true
+        }
+    }
+</script>
+{% endblock %}

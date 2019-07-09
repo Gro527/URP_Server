@@ -1,0 +1,19 @@
+{% extends "base_navibar.html" %}
+{% block buttonlist %}
+<form action="./base_info" method="POST">
+    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
+        name="uname" value="{{adm_id}}">基本信息</button>
+</form>
+<form action="./course_info" method="POST">
+    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
+        name="uname" value="{{adm_id}}">课程信息</button>
+</form>
+<form action="./stu_info" method="POST">
+    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
+        name="uname" value="{{adm_id}}">学生信息</button>
+</form>
+<form action="./tea_info" method="POST">
+    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
+        name="uname" value="{{adm_id}}">教师信息</button>
+</form>
+{% endblock %}
