@@ -2,8 +2,20 @@
 {% block info %}
 <div class="row">
     <div class="col-md-2">
-
         <div class="list-group">
+            {% if class_id %}
+            <form action="./del_class" method="POST" style="width: 100%">
+                <input type="hidden" name="uname" value="{{ adm_id }}">
+                <input type="hidden" name="class_id_to_del" value="{{ class_id }}">
+                {% if num_stu == 0 %}
+                <button type="submit" class="btn-danger" style="width: 100%">删除当前班级</button>
+                {% else %}
+                <button type="submit" class="btn-danger"
+                    style="width: 100%;background-color:rgb(206,206,206);color: rgb(104,104,104);border-color:rgb(206,206,206)"
+                    disabled>删除当前班级</button>
+                {% endif %}
+            </form>
+            {% endif %}
             <form action="./stu_info" method="POST">
                 <input type="hidden" name="uname" value="{{ adm_id }}">
                 {% for class in class_list %}
@@ -86,37 +98,50 @@
             </tbody>
         </table>
         {% endif %}
+        <form action="./del_stu" method="POST">
+            {% if student_id %}
+            <input type="hidden" name="uname" value="{{ adm_id }}">
+            <input type="hidden" name="stu_id_to_del" value="{{ student_id }}">
+            <button type="button" class="button btn-default" onclick="modStudent()">修改信息</button>
+            <button type="submit" class="button btn-danger">删除学生</button>
+            {% endif %}
+        </form>
     </div>
     <div class="col-md-8" id="add_stu" hidden>
-        <h3>添加学生</h3>
-        <form role="form" action="./add_student" method="POST">
+        <h3>添加/修改学生</h3>
+        <form id="form" role="form" action="./add_student" method="POST">
             <input type="hidden" name="uname" value="{{ adm_id }}">
-            <input type="hidden" name="class_id" value="{{ class_id }}">
+            <input id="def_stu_id" type="hidden" name="student_id" value="{{ student_id }}">
             <div class="input-group">
                 <span class="input-group-addon" style="width:30%">学号</span>
-                <input name="student_id" type="text" class="form-control">
+                <input id="idinput" name="student_id" type="text" class="form-control" value="">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" style="width:30%">班级</span>
+                <input id="classinput" name="class_id" type="text" class="form-control" value="">
             </div>
             <div class="input-group">
                 <span class="input-group-addon" style="width:30%">姓名</span>
-                <input name="name" type="text" class="form-control">
+                <input id="nameinput" name="name" type="text" class="form-control" value="">
             </div>
             <div class="input-group">
                 <span class="input-group-addon" style="width:30%">性别</span>
-                <input name="sex" type="number" class="form-control">
+                <input id="sexinput" name="sex" type="number" class="form-control" value="">
             </div>
             <div class="input-group">
                 <span class="input-group-addon" style="width:34%">生日</span>
-                <input name="birth_date" type="date" class="form-control">
+                <input id="birthday" name="birth_date" type="date" class="form-control" value="">
             </div>
             <div class="input-group">
                 <span class="input-group-addon" style="width:30%">入学日期</span>
-                <input name="entrance_date" type="date" class="form-control">
+                <input id="entrance" name="entrance_date" type="date" class="form-control" value="">
             </div>
-            <br/>
+            <br />
             <button class="button btn-default" type="submit"> 提交</button>
         </form>
     </div>
     <div class="col-md-8" id="add_class" hidden>
+        <h3>添加班级</h3>
         <form role="form" action="./add_class" method="POST">
             <input type="hidden" name="uname" value="{{ adm_id }}">
             <div class="input-group">
@@ -124,36 +149,76 @@
                 <input name="class_id" type="text" class="form-control">
             </div>
 
-            <br/>
+            <br />
             <button class="button btn-default" type="submit"> 提交</button>
         </form>
     </div>
 </div>
 
+{% if class_id %}
 <script>
     function showAddStudent() {
         var stu_info = document.getElementById("stu_info")
         var add_stu = document.getElementById("add_stu")
         var add_class = document.getElementById("add_class")
-        if (stu_info) {
-            stu_info.hidden = !stu_info.hidden
-        }
-        add_stu.hidden = !add_stu.hidden
-        if (!add_stu.hidden && !add_class.hidden) {
-            add_class.hidden = true
-        }
+        var idinput = document.getElementById("idinput")
+        var nameinput = document.getElementById("nameinput")
+        var sexinput = document.getElementById("sexinput")
+        var birthday = document.getElementById("birthday")
+        var entrance = document.getElementById("entrance")
+        var classinput = document.getElementById("classinput")
+        var def_stu_id = document.getElementById("def_stu_id")
+        var form = document.getElementById("form")
+        stu_info.hidden = true;
+        add_stu.hidden = false;
+        add_class.hidden = true;
+        idinput.value = ""
+        nameinput.value = ""
+        sexinput.value = 0
+        birthday.value = ""
+        entrance.value = ""
+        classinput.value = "{{ class_id }}"
+        idinput.disabled = false
+        def_stu_id.disabled = true
+        form.setAttribute("action", "./mod_stu")
     }
     function showAddClass() {
         var stu_info = document.getElementById("stu_info")
         var add_stu = document.getElementById("add_stu")
         var add_class = document.getElementById("add_class")
-        add_class.hidden = !add_class.hidden
-        if (stu_info) {
-            stu_info.hidden = !stu_info.hidden
-        }
-        if (!add_stu.hidden && !add_class.hidden) {
-            add_stu.hidden = true
-        }
+        stu_info.hidden = true;
+        add_stu.hidden = true;
+        add_class.hidden = false;
     }
 </script>
+{% endif %}
+{% if student_id %}
+<script>
+    function modStudent() {
+        var stu_info = document.getElementById("stu_info")
+        var add_stu = document.getElementById("add_stu")
+        var add_class = document.getElementById("add_class")
+        var idinput = document.getElementById("idinput")
+        var nameinput = document.getElementById("nameinput")
+        var sexinput = document.getElementById("sexinput")
+        var birthday = document.getElementById("birthday")
+        var entrance = document.getElementById("entrance")
+        var classinput = document.getElementById("classinput")
+        var def_stu_id = document.getElementById("def_stu_id")
+        var form = document.getElementById("form")
+        stu_info.hidden = true;
+        add_stu.hidden = false;
+        add_class.hidden = true;
+        idinput.value = "{{ student['id'] }}"
+        nameinput.value = "{{ student['name'] }}"
+        sexinput.value = parseInt("{{ student['sex'] }}")
+        birthday.value = "{{ student['birthdate'] }}"
+        entrance.value = "{{ student['entrance_date'] }}"
+        classinput.value = "{{ class_id }}"
+        idinput.disabled = true
+        def_stu_id.disabled = false
+        form.setAttribute("action", "./mod_stu")
+    }
+</script>
+{% endif %}
 {% endblock %}

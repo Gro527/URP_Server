@@ -59,6 +59,21 @@ def add_stu(stu_id,name,sex,birthdate,entrance_date,class_id):
             cursor = db.cursor()
             sql = "insert into student(id,password,name,sex,birthdate,entrance_date,class_id) values(\
                 '%s','%s','%s',%s,'%s','%s','%s')" % (stu_id,stu_id,name,sex,birthdate,entrance_date,class_id)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False
+
+def update_stu(stu_id,name,sex,birthdate,entrance_date,class_id):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "update student set name = '%s', sex = %s, \
+                birthdate = '%s', entrance_date='%s', class_id = '%s'\
+                    where id = '%s'" % (name,sex,birthdate,entrance_date,class_id,stu_id)
             print(sql)
             cursor.execute(sql)
             db.commit()

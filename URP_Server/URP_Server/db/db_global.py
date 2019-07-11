@@ -189,3 +189,34 @@ def delete_course(course_id):
         except:
             db.rollback()
             return False
+
+def delete_student(stu_id):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "delete from student where id = '%s'" % (
+                stu_id)
+            print(sql)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False
+
+def delete_class(class_id):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "delete from class where id = '%s'" % (
+                class_id)
+            print(sql)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False
+

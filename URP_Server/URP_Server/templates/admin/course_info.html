@@ -75,9 +75,7 @@
         <h3>添加/修改课程</h3>
         <form id="form" role="form" action="./add_course" method="POST">
             <input type="hidden" name="uname" value="{{ adm_id }}">
-            {% if course_id %}
-            <input type="hidden" name="course_id" value="{{ course_id }}">
-            {% endif %}
+            <input id="def_course_id" type="hidden" name="course_id" value="{{ course_id }}">
             <div class="input-group">
                 <span class="input-group-addon">课程编号</span>
                 <input id="inputid" name="course_id" type="text" class="form-control" value="">
@@ -99,10 +97,12 @@
         var info = document.getElementById("info");
         var add = document.getElementById("add");
         var button = document.getElementById("button");
+        var def_course_id = document.getElementById("def_course_id");
         if (info) info.hidden = !info.hidden;
         add.hidden = !add.hidden;
         if (!add.hidden) {
             button.hidden = true
+            def_course_id.disabled = true
         }
     };
 </script>
@@ -116,6 +116,7 @@
         var nameinput = document.getElementById("inputname");
         var creinput = document.getElementById("inputcredit");
         var form = document.getElementById("form");
+        var def_course_id = document.getElementById("def_course_id");
         if (info) info.hidden = !info.hidden;
         add.hidden = !add.hidden;
         if (!add.hidden) {
@@ -125,6 +126,7 @@
             creinput.value = "{{course['credit']}}"
             idinput.disabled = true 
             form.setAttribute("action", "./mod_course")
+            def_course_id.disabled = false
         }
     }
 </script>

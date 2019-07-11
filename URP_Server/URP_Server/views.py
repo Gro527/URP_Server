@@ -205,6 +205,7 @@ def adm_stu_info():
             adm_id=adm_id,
             class_list=class1_list,
             class_id=class_id,
+            num_stu=len(stu_list),
             stu_list=stu_list,
             title = "学生信息",
             year=datetime.now().year,
@@ -218,6 +219,7 @@ def adm_stu_info():
             adm_id=adm_id,
             class_list=class1_list,
             class_id=class_id,
+            num_stu=len(stu_list),
             stu_list=stu_list,
             stu_course = stu_course_list,
             student_id=student_id,
@@ -357,6 +359,82 @@ def del_course():
     if course_id:
         if func.adm_w.del_course(course_id):
             return redirect(url_for('adm_course_info')), 307
+        else:
+            return "删除失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/del_stu', methods=['POST'])
+def del_stu():
+    stu_id = request.form.get('stu_id_to_del')
+    print(request.form)
+    if stu_id:
+        if func.adm_w.del_stu(stu_id):
+            return redirect(url_for('adm_stu_info')), 307
+        else:
+            return "删除失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/del_class', methods=['POST'])
+def del_class():
+    class_id = request.form.get('class_id_to_del')
+    if class_id:
+        if func.adm_w.del_class(class_id):
+            return redirect(url_for('adm_stu_info')), 307
+        else:
+            return "删除失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/mod_stu',methods=['POST'])
+def mod_stu():
+    student_id = request.form.get('student_id', None)
+    studetn_name = request.form.get('name', None)
+    sex = request.form.get('sex', None)
+    birthdate = request.form.get('birth_date', None)
+    entrance_date = request.form.get('entrance_date', None)
+    class_id = request.form.get('class_id',None)
+    print(request.form)
+    if student_id:
+        if func.adm_w.mod_stu(student_id, studetn_name, sex, birthdate, entrance_date,class_id):
+            return redirect(url_for('adm_stu_info')), 307
+        else:
+            return "修改失败", 400
+    else:
+        return "参数错误", 400
+
+
+@app.route('/admin/add_teacher', methods=['POST'])
+def add_teacher():
+    teacher_id = request.form.get("teacher_id",None)
+    teacher_name = request.form.get("name",None)
+    if teacher_id:
+        if func.adm_w.add_tea(teacher_id,teacher_name):
+            return redirect(url_for('adm_tea_info')), 307
+        else:
+            return "添加失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/mod_teacher', methods=['POST'])
+def mod_teacher():
+    teacher_id = request.form.get("teacher_id",None)
+    teacher_name = request.form.get("name",None)
+    if teacher_id:
+        if func.adm_w.mod_tea(teacher_id,teacher_name):
+            return redirect(url_for('adm_tea_info')), 307
+        else:
+            return "修改失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/del_teacher', methods=['POST'])
+def del_teacher():
+    teacher_id = request.form.get('tea_id_to_del',None)
+    if teacher_id:
+        if func.adm_w.del_teacher(teacher_id):
+            return redirect(url_for('adm_tea_info')), 307
         else:
             return "删除失败", 400
     else:

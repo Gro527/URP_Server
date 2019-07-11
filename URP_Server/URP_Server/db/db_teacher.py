@@ -93,3 +93,43 @@ def get_tea_list():
         except IndexError as ie:
             print(ie)
             return None
+
+def insert_teacher(teacher_id, name):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "insert into teacher(id,password,name) values(\
+                '%s','%s','%s')" % (teacher_id,teacher_id,name)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False
+
+def update_teacher(teacher_id, name):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "update teacher set name = '%s' where id = '%s'"% (name, teacher_id)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False
+
+def delete_teacher(teacher_id):
+    with app.app_context():
+        try:
+            db = dbconnect.get_conn()
+            cursor = db.cursor()
+            sql = "delete from teacher where id = '%s'" % (teacher_id)
+            cursor.execute(sql)
+            db.commit()
+            return True
+        except:
+            db.rollback()
+            return False
