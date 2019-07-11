@@ -1,19 +1,39 @@
 {% extends "base_navibar.html" %}
 {% block buttonlist %}
-<form action="./base_info" method="POST">
-    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
-        name="uname" value="{{adm_id}}">基本信息</button>
-</form>
-<form action="./course_info" method="POST">
-    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
-        name="uname" value="{{adm_id}}">课程信息</button>
-</form>
-<form action="./stu_info" method="POST">
-    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
-        name="uname" value="{{adm_id}}">学生信息</button>
-</form>
-<form action="./tea_info" method="POST">
-    <button class="button btn-default" style="border: none;background-color: rgb(211, 224, 224)" type="submit"
-        name="uname" value="{{adm_id}}">教师信息</button>
-</form>
+{% if adm %}<li class="active">{% else %}
+<li>{% endif %}
+    <a style="height:100%;width:100%">
+        <form action="./base_info" method="POST" style="height:100%;width:100%">
+            <button class="button btn-default" style="border: none;background: none;height:100%;width:100%;"
+                type="submit" name="uname" value="{{adm_id}}">基本信息</button>
+        </form>
+    </a>
+</li>
+{% if course_list %}<li class="active">{% else %}
+<li>{% endif %}
+    <a style="height:100%;width:100%">
+        <form action="./course_info" method="POST" style="height:100%;width:100%">
+            <button class="button btn-default" style="border: none;background: none;height:100%;width:100%;"
+                type="submit" name="uname" value="{{adm_id}}">课程信息</button>
+        </form>
+    </a>
+</li>
+{% if class_list %}<li class="active">{% else %}
+<li>{% endif %}
+    <a style="height:100%;width:100%">
+        <form action="./stu_info" method="POST" style="height:100%;width:100%">
+            <button class="button btn-default" style="border: none;background: none;height:100%;width:100%;"
+                type="submit" name="uname" value="{{adm_id}}">学生信息</button>
+        </form>
+    </a>
+</li>
+{% if teacher_list %}<li class="active">{% else %}
+<li>{% endif %}
+    <a style="height:100%;width:100%">
+        <form action="./tea_info" method="POST" style="height:100%;width:100%">
+            <button class="button btn-default" style="border: none;background: none;height:100%;width:100%;"
+                type="submit" name="uname" value="{{adm_id}}">教师信息</button>
+        </form>
+    </a>
+</li>
 {% endblock %}

@@ -51,6 +51,8 @@
                     <td>{{ stu['score'] }}</td>
                     <td>
                         <form action="../score" method="POST">
+                            <input type="hidden" name="class_id" value="{{ class_id }}">
+                            <input type="hidden" name="uname" value="{{ tea_id }}">
                             <input type="hidden" name="course_id" value="{{ course_id }}">
                             <input type="hidden" name="student_id" value="{{stu['student_id']}}">
                             <input type="text" name="score">
@@ -82,7 +84,12 @@
         var tcc = JSON.parse(decodeHtmlEntity('{{ class_course_json }}'));
         var stages = [0, 0, 0, 0, 0];
         for (var stu in tcc) {
-            stages[(tcc[stu].score - 50) / 10] += 1;
+            if (stages < 50){
+                stages[0] +=1;
+            }
+            else {
+                stages[parseInt((tcc[stu].score - 50) / 10)] += 1;
+            }
         };
         var myChart1 = echarts.init(document.getElementById('bar'));
         var option1 = {

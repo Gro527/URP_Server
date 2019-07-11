@@ -3,9 +3,9 @@ from flask import g
 from flask import current_app
 from URP_Server import app
 
-a = '47.94.210.236'
+a = 'localhost'
 uname = 'root'
-pw = 'Yuker2019!'
+pw = 'root'
 database = 'urp'
 
 
