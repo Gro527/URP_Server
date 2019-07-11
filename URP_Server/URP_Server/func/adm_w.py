@@ -15,3 +15,13 @@ def add_stu(stu_id,name,sex,birthdate,entrance_date,class_id):
         return True
     return False
 
+def mod_course(course_id, course_name, credit):
+    if db_global.update_course(course_id, course_name, credit):
+        return True
+    return False
+
+def del_course(course_id):
+    if db_global.delete_course(course_id):
+        return True
+    return False
+

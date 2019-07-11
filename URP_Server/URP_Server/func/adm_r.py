@@ -18,3 +18,9 @@ def class_stu_list(class_id):
 
 def teacher_list():
     return db_teacher.get_tea_list()
+
+def stu_course(course_id):
+    return db_global.get_seudent_course_bu_course_id(course_id)
+
+def tea_course(course_id):
+    return db_global.get_tea_course_class_by_course_id(course_id)

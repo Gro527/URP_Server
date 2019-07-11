@@ -7,11 +7,16 @@
             <form action="./stu_info" method="POST">
                 <input type="hidden" name="uname" value="{{ adm_id }}">
                 {% for class in class_list %}
-                <button class="list-group-item" type="submit" name="class_id" value="{{class['id']}}"
+                {% if class['id'] == class_id %}
+                <button class="list-group-item active" type="submit" name="class_id" value="{{class['id']}}"
                     style="width:100%">
-                    {{class['id']}}
-                </button>
-                {% endfor %}
+                    {% else %}
+                    <button class="list-group-item" type="submit" name="class_id" value="{{class['id']}}"
+                        style="width:100%">
+                        {% endif %}
+                        {{class['id']}}
+                    </button>
+                    {% endfor %}
             </form>
             <button class="list-group-item" style="width:100%" onclick="showAddClass()">+</button>
         </div>
@@ -23,11 +28,16 @@
                 <input type="hidden" name="class_id" value="{{ class_id }}">
                 <input type="hidden" name="uname" value="{{ adm_id }}">
                 {% for stu in stu_list %}
-                <button class="list-group-item row" type="submit" name="student_id" value="{{stu['id']}}"
+                {% if stu['id'] == student_id %}
+                <button class="list-group-item row active" type="submit" name="student_id" value="{{stu['id']}}"
                     style="width:100%">
-                    {{stu['id']}} {{stu['name']}}
-                </button>
-                {% endfor %}
+                    {% else %}
+                    <button class="list-group-item row" type="submit" name="student_id" value="{{stu['id']}}"
+                        style="width:100%">
+                        {% endif %}
+                        {{stu['id']}} {{stu['name']}}
+                    </button>
+                    {% endfor %}
 
             </form>
             {% if class_id %}
@@ -52,12 +62,33 @@
                 </tr>
                 <tr>
                     <td><strong>课程列表</strong></td>
+                    <td>
+                        <table class="table table-condensed" style="background: none">
+                            <thead>
+                                <tr>
+                                    <td>课程号</td>
+                                    <td>课程名称</td>
+                                    <td>成绩</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in stu_course %}
+                                <tr>
+                                    <td>{{ course['course_id'] }}</td>
+                                    <td>{{ course['course_name'] }}</td>
+                                    <td>{{ course['score'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
             </tbody>
         </table>
         {% endif %}
     </div>
     <div class="col-md-8" id="add_stu" hidden>
+        <h3>添加学生</h3>
         <form role="form" action="./add_student" method="POST">
             <input type="hidden" name="uname" value="{{ adm_id }}">
             <input type="hidden" name="class_id" value="{{ class_id }}">
@@ -81,7 +112,8 @@
                 <span class="input-group-addon" style="width:30%">入学日期</span>
                 <input name="entrance_date" type="date" class="form-control">
             </div>
-            <button type="submit"> 提交</button>
+            <br/>
+            <button class="button btn-default" type="submit"> 提交</button>
         </form>
     </div>
     <div class="col-md-8" id="add_class" hidden>
@@ -92,7 +124,8 @@
                 <input name="class_id" type="text" class="form-control">
             </div>
 
-            <button type="submit"> 提交</button>
+            <br/>
+            <button class="button btn-default" type="submit"> 提交</button>
         </form>
     </div>
 </div>

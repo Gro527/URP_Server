@@ -168,11 +168,15 @@ def adm_course_info():
         ), 200
     else:
         course = func.adm_r.course_info(course_id)
+        stu_course_list = func.adm_r.stu_course(course_id)
+        tea_course_list = func.adm_r.tea_course(course_id)
         return render_template(
             '/admin/course_info.html',
             course=course,
             course_id=course_id,
             course_list=course_list,
+            num_stu_course = len(stu_course_list),
+            tea_course_list = tea_course_list,
             adm_id=adm_id,
             title = "课程信息",
             year=datetime.now().year,
@@ -208,12 +212,14 @@ def adm_stu_info():
     else:
         stu_list = func.adm_r.class_stu_list(class_id)
         student = func.stu_r.stu_info(student_id)
+        stu_course_list = func.stu_r.stu_course_info(student_id)
         return render_template(
             '/admin/stu_info.html',
             adm_id=adm_id,
             class_list=class1_list,
             class_id=class_id,
             stu_list=stu_list,
+            stu_course = stu_course_list,
             student_id=student_id,
             student=student,
             title = "学生信息",
@@ -329,5 +335,29 @@ def add_student():
             return redirect(url_for('adm_stu_info')), 307
         else:
             return "添加失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/mod_course', methods=['POST'])
+def mod_course():
+    course_id = request.form.get('course_id', None)
+    course_name = request.form.get('course_name', None)
+    credit = request.form.get('credit', None)
+    if course_id and course_name and credit:
+        if func.adm_w.mod_course(course_id, course_name, credit):
+            return redirect(url_for('adm_course_info')), 307
+        else:
+            return "修改失败", 400
+    else:
+        return "参数错误", 400
+
+@app.route('/admin/del_course', methods=['POST'])
+def del_course():
+    course_id = request.form.get('course_id_to_del')
+    if course_id:
+        if func.adm_w.del_course(course_id):
+            return redirect(url_for('adm_course_info')), 307
+        else:
+            return "删除失败", 400
     else:
         return "参数错误", 400

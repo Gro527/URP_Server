@@ -24,8 +24,16 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-4">
-            <button id="button" type="button" class="button btn-default"  onclick="addCourse()">+</button>
+        <div class="col-md-5" id="button">
+            <form action="./del_course" method="POST">
+            {% if course_id %}
+            <input type="hidden" name="uname" value="{{ adm_id }}">
+            <input type="hidden" name="course_id_to_del" value="{{ course_id }}">
+            <button type="button" class="button btn-default" onclick="modCourse()">修改课程</button>
+            <button type="submit" class="button btn-danger">删除课程</button>
+            {% endif %}
+            <button type="button" class="button btn-default" onclick="addCourse()">+</button>
+            </form>
         </div>
 
     </div>
@@ -48,29 +56,39 @@
             </tr>
             <tr>
                 <td><strong>选课人数</strong></td>
-                <td>待补充</td>
+                <td>{{num_stu_course}}</td>
             </tr>
             <tr>
                 <td><strong>任课教师</strong></td>
-                <td>待补充</td>
+                <td>
+                    {% for t in tea_course_list %}
+                    {{t['tea_name']}} ({{t['class_id']}}){% if not loop.last %},{% endif %}
+                    {% else %}
+                    无
+                    {% endfor %}
+                </td>
             </tr>
         </table>
     </div>
     {% endif %}
     <div id="add" hidden="true">
-        <form role="form" action="./add_course" method="POST">
+        <h3>添加/修改课程</h3>
+        <form id="form" role="form" action="./add_course" method="POST">
             <input type="hidden" name="uname" value="{{ adm_id }}">
+            {% if course_id %}
+            <input type="hidden" name="course_id" value="{{ course_id }}">
+            {% endif %}
             <div class="input-group">
                 <span class="input-group-addon">课程编号</span>
-                <input name="course_id" type="text" class="form-control">
+                <input id="inputid" name="course_id" type="text" class="form-control" value="">
             </div>
             <div class="input-group">
                 <span class="input-group-addon">课程名称</span>
-                <input name="course_name" type="text" class="form-control">
+                <input id="inputname" name="course_name" type="text" class="form-control" value="">
             </div>
             <div class="input-group">
                 <span class="input-group-addon">课程学分</span>
-                <input name="credit" type="text" class="form-control">
+                <input id="inputcredit" name="credit" type="text" class="form-control" value="">
             </div>
             <button type="submit"> 提交</button>
         </form>
@@ -83,9 +101,32 @@
         var button = document.getElementById("button");
         if (info) info.hidden = !info.hidden;
         add.hidden = !add.hidden;
-        if(!add.hidden){
+        if (!add.hidden) {
             button.hidden = true
+        }
+    };
+</script>
+{% if course_id %}
+<script>
+    function modCourse() {
+        var info = document.getElementById("info");
+        var add = document.getElementById("add");
+        var button = document.getElementById("button");
+        var idinput = document.getElementById("inputid");
+        var nameinput = document.getElementById("inputname");
+        var creinput = document.getElementById("inputcredit");
+        var form = document.getElementById("form");
+        if (info) info.hidden = !info.hidden;
+        add.hidden = !add.hidden;
+        if (!add.hidden) {
+            button.hidden = true
+            idinput.value = '{{course_id}}'
+            nameinput.value = "{{course['name']}}"
+            creinput.value = "{{course['credit']}}"
+            idinput.disabled = true 
+            form.setAttribute("action", "./mod_course")
         }
     }
 </script>
+{% endif %}
 {% endblock %}

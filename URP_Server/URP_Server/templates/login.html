@@ -30,21 +30,12 @@
             </div>
         </div>
     </div>
-
-    <form action="{{ url_for('login') }}" method="POST">
-        <input type="text" name="uname">
-        <button type="submit">123</button>
-    </form>
-
-
-
-
     <hr />
     <div class="container body-content">
         <div class="col-md-offset-4" style="width: 33%;height:600px">
             <h2>欢迎使用选课管理系统</h2>
             <hr>
-            <form action="{{ url_for('login') }}" method="POST">
+            <form action="../login" method="POST" style="height: 600px">
                 <div class="input-group">
                     <span class="input-group-addon" style="width:30%">用户名</span>
                     <input name="uname" type="text" class="form-control">
@@ -53,18 +44,16 @@
                     <span class="input-group-addon" style="width:30%">密码</span>
                     <input name="pw" type="password" class="form-control">
                 </div>
-                <br />
-                <div class="btn-group" data-toggle="buttons">
+                <br/>
                     <button class="btn btn-default" type="submit" name="login" value="stu">
-                        <input type="checkbox"> 学生登录
+                         学生登录
                     </button>
                     <button class="btn btn-default" type="submit" name="login" value="teacher">
-                        <input type="checkbox"> 教师登录
+                         教师登录
                     </button>
                     <button class="btn btn-default" type="submit" name="login" value="adm">
-                        <input type="checkbox"> 管理员登录
+                         管理员登录
                     </button>
-                </div>
             </form>
 
         </div>
