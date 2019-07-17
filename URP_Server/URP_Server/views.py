@@ -110,7 +110,6 @@ def tea_course_info():
     course_id = request.form.get('course_id', None)
     class_id = request.form.get('class_id', None)
     tea = func.tea_r.tea_info(tea_id)
-    print(request.form)
     if not course_id or not class_id:
         return render_template(
             'teacher/course_info.html',
@@ -122,7 +121,6 @@ def tea_course_info():
     else:
         tcc = func.tea_r.tea_class_course(tea_id, class_id, course_id)
         tcc_json = json.dumps(tcc, ensure_ascii=False)
-        print(tcc, tcc_json)
         return render_template(
             'teacher/course_info.html',
             tea_id=tea_id,
@@ -157,7 +155,6 @@ def adm_course_info():
     course_id = request.form.get('course_id', None)
     adm_id = request.form.get('uname', None)
     course_list = func.adm_r.course_list()
-    print(request.form)
     if not course_id:
         return render_template(
             '/admin/course_info.html',
@@ -189,7 +186,6 @@ def adm_stu_info():
     class_id = request.form.get('class_id', None)
     student_id = request.form.get('student_id', None)
     class1_list = func.adm_r.class_list()
-    print(request.form, adm_id, class_id, student_id)
     if not class_id:
         return render_template(
             '/admin/stu_info.html',
@@ -234,7 +230,6 @@ def adm_tea_info():
     teacher_id = request.form.get('teacher_id', None)
     adm_id = request.form.get('uname', None)
     teacher_list = func.adm_r.teacher_list()
-    print(request.form)
     if not teacher_id:
         return render_template(
             '/admin/tea_info.html',
@@ -245,7 +240,6 @@ def adm_tea_info():
         ), 200
     else:
         teacher = func.tea_r.tea_info(teacher_id)
-        print(teacher)
         return render_template(
             '/admin/tea_info.html',
             teacher=teacher,
@@ -288,10 +282,12 @@ def login():
 # 分数录入
 @app.route('/score', methods=['POST'])
 def up_score():
-    print(request.form)
     stu_id = request.form['student_id']
     course_id = request.form['course_id']
-    score = request.form['score']
+    score_str = request.form.get("score", "-1")
+    if not len(score_str):
+        return "参数错误", 400
+    score = float(score_str)
     if func.tea_w.up_score(stu_id, course_id, score):
         return redirect(url_for('tea_course_info')), 307
     else:
@@ -367,7 +363,6 @@ def del_course():
 @app.route('/admin/del_stu', methods=['POST'])
 def del_stu():
     stu_id = request.form.get('stu_id_to_del')
-    print(request.form)
     if stu_id:
         if func.adm_w.del_stu(stu_id):
             return redirect(url_for('adm_stu_info')), 307
@@ -395,7 +390,6 @@ def mod_stu():
     birthdate = request.form.get('birth_date', None)
     entrance_date = request.form.get('entrance_date', None)
     class_id = request.form.get('class_id',None)
-    print(request.form)
     if student_id:
         if func.adm_w.mod_stu(student_id, studetn_name, sex, birthdate, entrance_date,class_id):
             return redirect(url_for('adm_stu_info')), 307

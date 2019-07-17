@@ -59,6 +59,7 @@ def add_stu(stu_id,name,sex,birthdate,entrance_date,class_id):
             cursor = db.cursor()
             sql = "insert into student(id,password,name,sex,birthdate,entrance_date,class_id) values(\
                 '%s','%s','%s',%s,'%s','%s','%s')" % (stu_id,stu_id,name,sex,birthdate,entrance_date,class_id)
+            print(sql)
             cursor.execute(sql)
             db.commit()
             return True
